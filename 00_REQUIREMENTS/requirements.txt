@@ -1,0 +1,9 @@
+boto3
+opencv-python
+numpy
+findspark
+tensorflow
+pyspark
+s3fs
+fsspec
+jets3t
