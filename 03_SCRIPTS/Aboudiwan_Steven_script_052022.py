@@ -98,7 +98,7 @@ def main(DEBUG=False):
     main_folder_name = 'fruits-360-original-size'
     path_to_csv = f'{main_folder_name}/{output_folder}/ml_output.csv'
     n_batch = 500
-    nb_samples_ = 300
+    nb_samples_ = 200
 
     conf = (SparkConf().set(
         'spark.executor.extraJavaOptions',
