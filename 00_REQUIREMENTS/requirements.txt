@@ -5,7 +5,6 @@ aiohttp
 aioitertools
 aiosignal
 altair
-argon2-cff
 astunparse
 async-generator
 async-timeout
