@@ -1,7 +1,6 @@
 """
 Main script to run on ec2 instance
 """
-
 import boto3
 import os
 import cv2
@@ -15,6 +14,7 @@ from tensorflow.keras.applications.vgg16 import preprocess_input
 from pyspark.ml.feature import PCA
 from pyspark.sql.functions import monotonically_increasing_id
 from io import StringIO
+from pyspark import SparkConf
 
 
 def param_s3():
@@ -100,15 +100,28 @@ def main(DEBUG=False):
     n_batch = 500
     nb_samples_ = 300
 
+    conf = (SparkConf().set(
+        'spark.executor.extraJavaOptions',
+        '-Dcom.amazonaws.services.s3.enableV4=true').set(
+        'spark.driver.extraJavaOptions',
+        '-Dcom.amazonaws.services.s3.enableV4=true'))
+
     findspark.init()
+
     bucket, s3_client = param_s3()
-    sc = SparkContext()
-    spark = SparkSession.builder.getOrCreate()
+    sc = SparkContext(conf=conf)
+    sc.setSystemProperty('com.amazonaws.services.s3.enableV4', 'true')
+    hadoopConf = sc._jsc.hadoopConfiguration()
+    hadoopConf.set("fs.s3a.awsAccessKeyId", access_id)
+    hadoopConf.set("fs.s3a.awsSecretAccessKey", access_key)
+    hadoopConf.set("fs.s3a.endpoint", "s3.eu-west-3.amazonaws.com")
+    hadoopConf.set("com.amazonaws.services.s3a.enableV4", "true")
+    hadoopConf.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+    hadoopConf.set('fs.s3a.aws.credentials.provider', 'org.apache.hadoop.fs.s3a.TemporaryAWSCredentialsProvider')
+
+    spark = SparkSession(sc)
     spark.conf.set("spark.sql.execution.arrow.enabled", "true")
     sc.setLogLevel("ERROR")
-    hadoop_conf = sc._jsc.hadoopConfiguration()
-    hadoop_conf.set('fs.s3a.access.key', access_id)
-    hadoop_conf.set('fs.s3a.secret.key', access_key)
 
     print('################ Searching files ################')
     folder_list = list_folders(s3_client, bucket_name)

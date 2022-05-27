@@ -3,7 +3,9 @@ opencv-python
 numpy
 findspark
 tensorflow
+keras
 pyspark
 s3fs
 fsspec
 jets3t
+pyarrow
