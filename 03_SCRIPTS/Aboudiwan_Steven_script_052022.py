@@ -24,8 +24,8 @@ def param_s3():
     """
     bckt = 'opc-p8-data'
     reg = 'eu-west-3'
-    id_access = 'AKIAXIDC3RC735BA4BXV'
-    secret_key = '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'
+    id_access = ''
+    secret_key = ''
     s3 = boto3.resource(
         service_name='s3',
         region_name=reg,
@@ -91,8 +91,8 @@ def main(DEBUG=False):
     """
     print('################ Initializing ################')
     bucket_name = 'opc-p8-data'
-    access_id = 'AKIAXIDC3RC735BA4BXV'
-    access_key = 'eqCzl8vU8ZHzv8RlOOHZ1f3OWR3UR5h6B/GnBYI5'
+    access_id = ''
+    access_key = ''
     output_folder = 'ML_FEATURES'
     training_set_folder = 'Training'
     main_folder_name = 'fruits-360-original-size'
